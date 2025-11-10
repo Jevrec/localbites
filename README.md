@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Nextjs majhen Projekt 
 
-## Getting Started
+# 🍽️ Restavracije po mestu — Next.js + OpenStreetMap
+Enostavna spletna aplikacija zgrajena v **Next.js**, ki uporabniku omogoča, da vnese ime mesta in pridobi seznam vseh restavracij v tem mestu (ne čisto vseh vedno se kakšna zgreši).  
+Aplikacija uporablja **brezplačne in odprtokodne podatke** iz **OpenStreetMap (Nominatim + Overpass API)**, do nadalnjega saj bi želim sppremeniti na Google API.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Funkcionalnosti
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🔍 Iskanje restavracij po mestu (npr. "Ljubljana", "Maribor", "Paris")
+- 📍 Pridobivanje podatkov iz OpenStreetMap (Nominatim + Overpass API)
+- 💻 Zgrajeno z moderno tehnologijo (Next.js 14, TypeScript, React)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧩 Tehnologije
 
-## Learn More
+- [Next.js](https://nextjs.org/) — ogrodje za React z vgrajenim API slojem  
+- [TypeScript](https://www.typescriptlang.org/) — statično tipiziran JavaScript  
+- [OpenStreetMap Nominatim](https://nominatim.org/) — za geolokacijo mest  
+- [Overpass API](https://overpass-api.de/) — za iskanje restavracij (amenity=restaurant)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Spletna
+link: https://vercel.com/jevrecs-projects/localbites/98pSKTU7HPwoqMrARAs6cLsTXttx - Search še ne deluje
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

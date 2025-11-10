@@ -9,7 +9,6 @@ export async function GET(request: Request) {
   }
 
   try {
-    // 1️⃣ Get coordinates for the town
     const geoRes = await fetch(
       `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(town)}`
     );
@@ -21,7 +20,6 @@ export async function GET(request: Request) {
 
     const { lat, lon } = geoData[0];
 
-    // 2️⃣ Query Overpass API for restaurants
     const overpassQuery = `
       [out:json][timeout:25];
       node["amenity"="restaurant"](around:5000,${lat},${lon});
@@ -35,7 +33,6 @@ export async function GET(request: Request) {
 
     const overpassData = await overpassRes.json();
 
-    // 3️⃣ Format results
     const restaurants = overpassData.elements.map((el: any) => ({
       id: el.id,
       name: el.tags?.name,
