@@ -27,7 +27,7 @@ export default function Home() {
         />
         <button
           onClick={handleSearch}
-          className="text-white px-4 py-2 rounded"
+          className="bg-primary hover:bg-accent px-4 py-2 rounded-lg transition-colors"
           disabled={loading}
         >
           {loading ? "Searching..." : "Search"}
@@ -38,7 +38,7 @@ export default function Home() {
         {restaurants.map((r, i) => (
           <li key={i} className="border p-3 rounded">
             <strong>{r.name || "Unnamed Restaurant"}</strong><br />
-            <span className="text-sm sec_color">
+            <span className="text-sm text-muted">
               {r.address || "No address available"}
             </span>
           </li>
