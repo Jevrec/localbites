@@ -27,7 +27,7 @@ export default function Home() {
         />
         <button
           onClick={handleSearch}
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="text-white px-4 py-2 rounded"
           disabled={loading}
         >
           {loading ? "Searching..." : "Search"}
@@ -38,7 +38,7 @@ export default function Home() {
         {restaurants.map((r, i) => (
           <li key={i} className="border p-3 rounded">
             <strong>{r.name || "Unnamed Restaurant"}</strong><br />
-            <span className="text-sm text-gray-600">
+            <span className="text-sm sec_color">
               {r.address || "No address available"}
             </span>
           </li>
