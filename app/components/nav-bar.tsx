@@ -6,7 +6,8 @@ const Links = [
     { href: "/proflie", text: 'Profile' },
     { href: "/query", text: 'Query' },
     { href: "/restaurants", text: 'Restaurants' },
-    { href: "/most-search", text: 'Most searched' }
+    { href: "/most-search", text: 'Most searched' },
+    { href: "/login", text: 'Login' }
 ];
 
 const Navbar = () => {

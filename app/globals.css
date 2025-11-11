@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* 🔸 Default (light) colors */
 :root {
   --color-background: #ffffff;
   --color-foreground: #171717;
@@ -19,7 +18,6 @@
   --color-muted: var(--color-muted);
 }
 
-/* 🌙 Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background: #1e1e2a;

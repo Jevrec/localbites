@@ -36,7 +36,7 @@ export default function Home() {
 
       <ul className="mt-6 space-y-3">
         {restaurants.map((r, i) => (
-          <li key={i} className="border p-3 rounded">
+          <li key={i} className="border border-muted p-3 rounded">
             <strong>{r.name || "Unnamed Restaurant"}</strong><br />
             <span className="text-sm text-muted">
               {r.address || "No address available"}
