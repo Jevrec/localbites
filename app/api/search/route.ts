@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { GooglePlace } from "@/app/types/google";
 
 export async function POST(req: Request) {
   try {
@@ -11,9 +10,11 @@ export async function POST(req: Request) {
         city
       )}&key=${apiKey}`
     );
+
     const geoData = await geoRes.json();
 
     if (!geoData.results.length) {
+      console.log("No geocode results");
       return NextResponse.json({ restaurants: [] });
     }
 
@@ -25,10 +26,9 @@ export async function POST(req: Request) {
 
     const placesData = await placesRes.json();
 
-    return NextResponse.json({
-      restaurants: (placesData.results as GooglePlace[]) || []
-    });
+    return NextResponse.json({ restaurants: placesData.results || [] });
   } catch (err) {
+    console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

@@ -12,7 +12,8 @@ export default function Home() {
     if (!city.trim()) return;
 
     setLoading(true);
-
+    console.log("API request received:", city);
+    
     try {
       const res = await fetch("/api/search", {
         method: "POST",
