@@ -1,49 +1,85 @@
 "use client";
+
 import { useState } from "react";
 
 export default function Home() {
-  const [town, setTown] = useState("");
-  const [restaurants, setRestaurants] = useState<any[]>([]);
+  const [city, setCity] = useState("");
+  const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(false);
 
   async function handleSearch() {
+    if (!city.trim()) return;
+
     setLoading(true);
-    const res = await fetch(`/api/restaurants?town=${encodeURIComponent(town)}`);
-    const data = await res.json();
-    setRestaurants(data.restaurants || []);
+
+    try {
+      const res = await fetch("/api/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ city }),
+      });
+
+      if (!res.ok) {
+        setLoading(false);
+        alert("API Error: " + res.status);
+        return;
+      }
+
+      const data = await res.json();
+      setRestaurants(data.restaurants || []);
+    } catch (err) {
+      alert("Network error");
+    }
+
     setLoading(false);
   }
 
   return (
-    <div className="p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Find Restaurants by Town</h1>
-      <div className="flex gap-2">
+    <div className="min-h-screen bg-background flex flex-col items-center py-20 px-4">
+      <h1 className="text-4xl font-bold mb-8 text-foreground">
+        Restaurant Finder
+      </h1>
+
+      <div className="flex gap-3 w-full max-w-md">
         <input
-          type="text"
-          value={town}
-          onChange={(e) => setTown(e.target.value)}
-          placeholder="Enter a town name..."
-          className="flex-1 border p-2 rounded"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="Enter a city..."
+          className="flex-1 px-4 py-2 text-foreground rounded-lg border shadow-sm focus:ring-2 focus:ring-muted"
         />
+
         <button
           onClick={handleSearch}
-          className="bg-primary hover:bg-accent px-4 py-2 rounded-lg transition-colors"
-          disabled={loading}
+          className="px-5 py-2 bg-primary text-foreground rounded-lg shadow-md hover:bg-accent transition"
         >
-          {loading ? "Searching..." : "Search"}
+          Search
         </button>
       </div>
 
-      <ul className="mt-6 space-y-3">
-        {restaurants.map((r, i) => (
-          <li key={i} className="border border-muted p-3 rounded">
-            <strong>{r.name || "Unnamed Restaurant"}</strong><br />
-            <span className="text-sm text-muted">
-              {r.address || "No address available"}
-            </span>
-          </li>
+      {loading && (
+        <div className="mt-10 animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid"></div>
+      )}
+
+      <div className="mt-10 w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6">
+        {restaurants.map((r) => (
+          <div
+            key={r.place_id}
+            className="bg-surface p-5 rounded-xl shadow hover:shadow-lg transition"
+          >
+            <h2 className="text-xl font-semibold text-foreground">{r.name}</h2>
+            <p className="text-muted mt-1">{r.vicinity}</p>
+            {r.rating && (
+              <p className="mt-2 text-yellow-600 font-medium">
+                {r.rating} / 5
+              </p>
+            )}
+          </div>
         ))}
-      </ul>
+      </div>
+
+      {!loading && restaurants.length === 0 && (
+        <p className="mt-10 text-foreground">No restaurants found yet.</p>
+      )}
     </div>
   );
 }
