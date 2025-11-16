@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { GooglePlace } from "@/app/types/google";
 
 export default function Home() {
   const [city, setCity] = useState("");
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState<GooglePlace[]>([]);
   const [loading, setLoading] = useState(false);
 
   async function handleSearch() {

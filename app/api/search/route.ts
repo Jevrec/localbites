@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { GooglePlace } from "@/app/types/google";
 
 export async function POST(req: Request) {
   try {
@@ -24,7 +25,9 @@ export async function POST(req: Request) {
 
     const placesData = await placesRes.json();
 
-    return NextResponse.json({ restaurants: placesData.results || [] });
+    return NextResponse.json({
+      restaurants: (placesData.results as GooglePlace[]) || []
+    });
   } catch (err) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
