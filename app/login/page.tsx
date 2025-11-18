@@ -18,10 +18,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
+    <div className="flex flex-col items-center justify-center max-h-screen bg-background text-foreground">
       <form
         onSubmit={handleSubmit}
-        className="bg-surface p-6 rounded-lg shadow-md flex flex-col gap-4"
+        className="bg-surface p-15 rounded-lg shadow-md flex flex-col gap-4"
       >
         <h1 className="text-2xl font-bold">Login</h1>
         <input
@@ -41,6 +41,14 @@ export default function LoginPage() {
         <button className="bg-primary hover:bg-accent text-white py-2 rounded transition-colors">
           Login
         </button>
+        <div className="flex flex-box gap-4">
+          <button className="hover:bg-black text-white p-2 rounded transition-colors">
+              Login with Google
+          </button>
+          <button className="hover:bg-black text-white p-2 rounded transition-colors">
+              Login with GitHub
+          </button>
+        </div>
         <p>{message}</p>
       </form>
     </div>

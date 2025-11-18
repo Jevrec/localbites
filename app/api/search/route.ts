@@ -12,6 +12,7 @@ export async function POST(req: Request) {
     );
 
     const geoData = await geoRes.json();
+    console.log("Geocode result:", geoData);
 
     if (!geoData.results.length) {
       console.log("No geocode results");
@@ -25,6 +26,7 @@ export async function POST(req: Request) {
     );
 
     const placesData = await placesRes.json();
+    console.log("Places result:", placesData);
 
     return NextResponse.json({ restaurants: placesData.results || [] });
   } catch (err) {

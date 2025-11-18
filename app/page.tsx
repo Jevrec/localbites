@@ -39,7 +39,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-20 px-4">
       <h1 className="text-4xl font-bold mb-8 text-foreground">
-        Restaurant Finder
+        LocalBites
       </h1>
 
       <div className="flex gap-3 w-full max-w-md">
@@ -63,10 +63,17 @@ export default function Home() {
       )}
 
       <div className="mt-10 w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-6">
-        {restaurants.map((r) => (
-          <div
+        {restaurants.map((r) => {
+          const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+            r.name + " " + (r.vicinity || "")
+          )}`;
+
+        return (
+          <a
             key={r.place_id}
-            className="bg-surface p-5 rounded-xl shadow hover:shadow-lg transition"
+            href = {mapUrl}
+            target="_blank"
+            className="bg-surface p-5 rounded-xl shadow hover:shadow-lg transition hover:bg-gray-900 cursor-pointer"
           >
             <h2 className="text-xl font-semibold text-foreground">{r.name}</h2>
             <p className="text-muted mt-1">{r.vicinity}</p>
@@ -75,10 +82,11 @@ export default function Home() {
                 {r.rating} / 5
               </p>
             )}
-          </div>
-        ))}
-      </div>
+          </a>
+        );
+      })}
 
+      </div>
       {!loading && restaurants.length === 0 && (
         <p className="mt-10 text-foreground">No restaurants found yet.</p>
       )}
