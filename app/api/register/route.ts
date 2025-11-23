@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { sanity } from "@/sanity/lib/sanity";
-//import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
   try {
@@ -13,17 +13,34 @@ export async function POST(req: Request) {
       );
     }
 
-    //const hashed = await bcrypt.hash(password, 10);
+    const existing = await sanity.fetch(
+      `*[_type == "user" && email == $email][0]`,
+      { email }
+    );
 
-    const newUser = await sanity.create({
+    if (existing) {
+      return NextResponse.json(
+        { error: "Email already registered" },
+        { status: 400 }
+      );
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    const user = await sanity.create({
       _type: "user",
       email,
       username,
-      password: password //mora biti hashed - začasno zamenjano,
+      password: hashed
     });
 
-    return NextResponse.json({ user: newUser });
+    return NextResponse.json({ user });
   } catch (err) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+   
+    console.error("Registration error:", err);
+    return NextResponse.json(
+      { error: "Server error", details: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
   }
 }

@@ -18,47 +18,38 @@ export default function RegisterPage() {
     });
 
     const data = await res.json();
-
-    if (!res.ok) {
-      setMessage(data.error || "Registration failed.");
-    } else {
-      setMessage("User registered successfully!");
-      setEmail("");
-      setUsername("");
-      setPassword("");
-    }
+    setMessage(data.error || "Account created!");
   }
 
   return (
     <div className="flex flex-col items-center justify-center max-h-screen bg-background text-foreground">
       <form
         onSubmit={handleRegister}
-        className="bg-surface p-15 rounded-lg shadow-md flex flex-col gap-4"
+        className="bg-surface p-15 rounded-lg shadow-md flex flex-col gap-4 w-110"
       >
         <h1 className="text-2xl font-bold">Register</h1>
 
         <input
-          type="email"
+          className="border border-muted p-2 rounded"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border border-muted p-2 rounded"
         />
 
         <input
           type="text"
+          className="border border-muted p-2 rounded"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="border border-muted p-2 rounded"
         />
 
         <input
           type="password"
+          className="border border-muted p-2 rounded"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border border-muted p-2 rounded"
         />
 
         <button className="bg-primary hover:bg-accent text-white py-2 rounded transition-colors">

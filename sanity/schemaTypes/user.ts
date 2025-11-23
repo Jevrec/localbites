@@ -15,7 +15,7 @@ export const user = defineType({
       name: "password",
       type: "string",
       title: "Hashed Password",
-      hidden: true, 
+      hidden: false, 
     }),
     defineField({
       name: "username",
