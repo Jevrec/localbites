@@ -50,10 +50,10 @@ export default function LoginPage() {
         </button>
         
         <div className="flex flex-box gap-4">
-          <button className="hover:bg-black text-white p-2 rounded transition-colors">
+          <button className="hover:bg-black text-white p-2 rounded transition-colors border-1 border-white w-39">
               Login with Google
           </button>
-          <button className="hover:bg-black text-white p-2 rounded transition-colors">
+          <button className="hover:bg-black text-white p-2 rounded transition-colors border-1 border-white w-39">
               Login with GitHub
           </button>
         </div>

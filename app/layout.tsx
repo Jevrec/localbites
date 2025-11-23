@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/nav-bar";
 import 'easymde/dist/easymde.min.css';
+import { Providers } from "./provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,8 +29,10 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
-        <main className="py-20 max-w-6x1 mx-auto">{children}</main>
+          <Providers>
+            <Navbar />
+            <main className="py-20 max-w-6x1 mx-auto">{children}</main>
+          </Providers>
       </body>
     </html>
   );
