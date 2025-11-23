@@ -79,7 +79,7 @@ export default function Home() {
             <p className="text-muted mt-1">{r.vicinity}</p>
             {r.rating && (
               <p className="mt-2 text-yellow-600 font-medium">
-                {r.rating} / 5
+                  {r.rating} / 5
               </p>
             )}
           </a>

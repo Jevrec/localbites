@@ -1,0 +1,33 @@
+import { defineField, defineType } from "sanity";
+
+export const user = defineType({
+  name: "user",
+  type: "document",
+  title: "User",
+  fields: [
+    defineField({
+      name: "email",
+      type: "string",
+      title: "Email",
+      validation: (Rule: any) => Rule.required().email(),
+    }),
+    defineField({
+      name: "password",
+      type: "string",
+      title: "Hashed Password",
+      hidden: true, 
+    }),
+    defineField({
+      name: "username",
+      type: "string",
+      title: "Username",
+      validation: (Rule: any) => Rule.required(),
+    }),
+    defineField({
+      name: "createdAt",
+      type: "datetime",
+      title: "Created At",
+      initialValue: () => new Date().toISOString(),
+    }),
+  ],
+})
