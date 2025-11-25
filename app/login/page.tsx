@@ -2,14 +2,18 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
- async function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true)
 
     const res = await signIn("credentials", {
       redirect: false,
@@ -17,8 +21,17 @@ export default function LoginPage() {
       password,
     });
 
-    if (res?.error) setMessage("Invalid email or password");
-    else setMessage("Logged in!");
+    if (res?.error) {
+      setMessage("Invalid email or password");
+    } else {
+      setMessage("Logged in! Redirecting in 3 seconds...");
+
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
+
+    setLoading(false)
   }
 
   return (
@@ -63,6 +76,12 @@ export default function LoginPage() {
         </Link>
 
         <p>{message}</p>
+
+      {loading && (
+        <div className="flex justify-center items-center mt-10">
+          <div className="mt-10 animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid"></div>
+        </div>
+      )}
       </form>
     </div>
   );

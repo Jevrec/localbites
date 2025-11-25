@@ -4,10 +4,10 @@ import { Imperial_Script } from "next/font/google";
 import Link from "next/link";
 import React from 'react';
 import { useSession, signOut } from "next-auth/react"
+import { UserIcon } from "@heroicons/react/16/solid";
 
 
 const Links = [
-    { href: "/proflie", text: 'Profile' },
     { href: "/query", text: 'Query' },
     { href: "/restaurants", text: 'Restaurants' },
     { href: "/most-search", text: 'Most searched' },
@@ -29,6 +29,18 @@ const Navbar = () => {
         </Link>
 
         <ul className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-0">
+          <li>
+            {
+              session ? (
+                <Link href="/user"className="hover:text-accent transition-colors flex flex-box">
+                  <UserIcon className="w-5 h-5" />
+                  {session.user?.name}
+                </Link>
+              ) : (
+                <p></p>
+              )
+            }
+          </li>
           {Links.map((link) => (
             <li key={link.href}>
               <Link
@@ -39,7 +51,7 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          {/* Conditional rendering based on session */}
+          
           <li>
             {isLoading ? (
               <span className="text-muted">...</span>

@@ -7,9 +7,11 @@ export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true)
 
     const res = await fetch("/api/register", {
       method: "POST",
@@ -19,6 +21,8 @@ export default function RegisterPage() {
 
     const data = await res.json();
     setMessage(data.error || "Account created!");
+
+    setLoading(false)
   }
 
   return (
