@@ -8,7 +8,7 @@ import { UserIcon } from "@heroicons/react/16/solid";
 
 
 const Links = [
-    { href: "/query", text: 'Query' },
+    { href: "/studio", text: 'Sanity' },
     { href: "/restaurants", text: 'Restaurants' },
     { href: "/most-search", text: 'Most searched' },
 ];

@@ -5,10 +5,8 @@ export default function LoginSkeleton() {
           <div className="h-10 bg-muted rounded"></div>
           <div className="h-10 bg-muted rounded"></div>
           <div className="h-10 bg-primary rounded"></div>
-          <div className="flex gap-4">
-            <div className="h-10 bg-muted rounded flex-1"></div>
-            <div className="h-10 bg-muted rounded flex-1"></div>
-          </div>
+            <div className="h-10 bg-muted rounded"></div>
+            <div className="h-10 bg-muted rounded"></div>
           <div className="h-4 bg-muted rounded w-20 mx-auto"></div>
         </div>
     )

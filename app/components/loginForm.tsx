@@ -33,6 +33,10 @@ export default function LoginForm() {
     }
   }
 
+  async function handleGoogleLogin() {
+    await signIn("google", { callbackUrl: "/" });
+  }
+
   return (
     <form
       onSubmit={handleLogin}
@@ -65,16 +69,17 @@ export default function LoginForm() {
         {loading ? "Logging in..." : "Login"}
       </button>
       
-      <div className="flex flex-box gap-4">
+      <div className="flex flex-col gap-4">
         <button 
           type="button"
-          className="hover:bg-black text-white p-2 rounded transition-colors border-1 border-white w-39"
+          onClick={handleGoogleLogin}
+          className="hover:bg-black text-white p-2 rounded transition-colors border border-white"
         >
           Login with Google
         </button>
         <button 
           type="button"
-          className="hover:bg-black text-white p-2 rounded transition-colors border-1 border-white w-39"
+          className="hover:bg-black text-white p-2 rounded transition-colors border border-white"
         >
           Login with GitHub
         </button>
