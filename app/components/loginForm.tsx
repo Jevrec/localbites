@@ -49,7 +49,7 @@ export default function LoginForm() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="border border-muted p-2 rounded"
+        className="input-box"
         required
       />
 
@@ -58,12 +58,12 @@ export default function LoginForm() {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="border border-muted p-2 rounded"
+        className="input-box"
         required
       />
 
       <button 
-        className="bg-primary hover:bg-accent text-white py-2 rounded transition-colors"
+        className="btn"
         disabled={loading}
       >
         {loading ? "Logging in..." : "Login"}
@@ -73,13 +73,13 @@ export default function LoginForm() {
         <button 
           type="button"
           onClick={handleGoogleLogin}
-          className="hover:bg-black text-white p-2 rounded transition-colors border border-white"
+          className="black-btn"
         >
           Login with Google
         </button>
         <button 
           type="button"
-          className="hover:bg-black text-white p-2 rounded transition-colors border border-white"
+          className="black-btn"
         >
           Login with GitHub
         </button>
@@ -93,7 +93,7 @@ export default function LoginForm() {
 
       {loading && (
         <div className="flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid"></div>
+          <div className="loading-spin"></div>
         </div>
       )}
     </form>

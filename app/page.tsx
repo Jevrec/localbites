@@ -76,12 +76,8 @@ export default function Home() {
         </div>
       </div>
 
-
-
-      
-
       {loading && (
-        <div className="mt-10 animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid"></div>
+        <div className="loading-spin"></div>
       )}
 
       <div className="mt-30 w-full max-w-2xl grid grid-cols-1 md:grid-cols-1 gap-6 rounded-4xl">
@@ -97,7 +93,7 @@ export default function Home() {
           target="_blank"
           className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group"
         >
-          <div className="absolute inset-0 bg-accent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
+          <div className="rounded-xl absolute inset-0 bg-accent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
           
           <div className="relative z-10">
             <h2 className="text-xl font-semibold text-foreground group-hover:text-white transition-colors duration-500">

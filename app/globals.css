@@ -35,3 +35,18 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.black-btn{
+  @apply hover:bg-black text-white p-2 rounded-lg transition-colors border border-white;
+}
+
+.loading-spin{
+  @apply animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid;
+}
+
+.btn{
+  @apply px-5 py-2 bg-primary text-foreground rounded-lg shadow-md hover:bg-accent transition;
+}
+
+.input-box{
+  @apply px-4 py-2 border border-muted rounded-lg;
+}

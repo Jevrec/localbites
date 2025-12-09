@@ -29,5 +29,13 @@ export const user = defineType({
       title: "Created At",
       initialValue: () => new Date().toISOString(),
     }),
+    defineField({
+      name: 'profileImage',
+      type: 'image',
+      title: 'Profile Image',
+      options: {
+        hotspot: true,
+      },
+    })
   ],
 })

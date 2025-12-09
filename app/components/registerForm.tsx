@@ -33,7 +33,7 @@ export default function RegisterForm() {
       <h1 className="text-2xl font-bold">Register</h1>
 
       <input
-        className="border border-muted p-2 rounded"
+        className="input-box"
         placeholder="Email"
         type="email"
         value={email}
@@ -43,7 +43,7 @@ export default function RegisterForm() {
 
       <input
         type="text"
-        className="border border-muted p-2 rounded"
+        className="input-box"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -52,7 +52,7 @@ export default function RegisterForm() {
 
       <input
         type="password"
-        className="border border-muted p-2 rounded"
+        className="input-box"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -60,7 +60,7 @@ export default function RegisterForm() {
       />
 
       <button 
-        className="bg-primary hover:bg-accent text-white py-2 rounded transition-colors"
+        className="btn"
         disabled={loading}
       >
         {loading ? "Registering..." : "Register"}
