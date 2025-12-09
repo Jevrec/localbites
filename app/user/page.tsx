@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import UserPageSkeleton from "../skeletons/UserPageSkeleton";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -32,6 +33,7 @@ export default function ProfilePage() {
   }, [session]);
 
   async function fetchUserData() {
+    
     try {
       const res = await fetch("/api/user/profile");
       const data = await res.json();
@@ -40,7 +42,7 @@ export default function ProfilePage() {
         setUsername(data.user.username || "");
         setEmail(data.user.email || "");
         setProfileImage(data.user.profileImage || "");
-        console.log(setProfileImage);
+        console.log("Profile image URL:", data.user.profileImage);
       }
     } catch (err) {
       console.error("Failed to fetch user data:", err);
@@ -102,7 +104,7 @@ export default function ProfilePage() {
       });
 
       const data = await res.json();
-
+      
       if (data.imageUrl) {
         setProfileImage(data.imageUrl);
         setMessage("Profile image updated!");
@@ -114,12 +116,13 @@ export default function ProfilePage() {
     }
 
     setImageUploading(false);
+    
   }
 
   if (status === "loading") {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-foreground"></div>
+      <div className="min-h-screen">
+        <UserPageSkeleton />
       </div>
     );
   }
@@ -131,7 +134,7 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center mb-8">
             <div className="relative group">
               {profileImage ? (
-                <Image
+                <img
                   src={profileImage}
                   alt="Profile"
                   width={150}
@@ -197,7 +200,7 @@ export default function ProfilePage() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 border border-muted rounded-lg"
+                className="w-full px-4 py-2 input-box"
                 required
               />
             </div>
@@ -220,7 +223,7 @@ export default function ProfilePage() {
               <input
                 type="email"
                 value={email}
-                className="w-full px-4 py-2 border border-muted rounded-lg bg-gray-100 cursor-not-allowed"
+                className="w-full px-4 py-2 border border-muted rounded-lg cursor-not-allowed"
                 disabled
               />
             </div>
@@ -250,7 +253,7 @@ export default function ProfilePage() {
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    className="w-full px-4 py-2 border border-muted rounded-lg"
+                    className="w-full px-4 py-2 input-box"
                   />
                 </div>
 
@@ -263,7 +266,7 @@ export default function ProfilePage() {
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-2 border border-muted rounded-lg"
+                    className="w-full px-4 py-2 input-box"
                   />
                 </div>
 
@@ -276,7 +279,7 @@ export default function ProfilePage() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-4 py-2 border border-muted rounded-lg"
+                    className="w-full px-4 py-2 input-box"
                   />
                 </div>
               </div>
@@ -286,14 +289,11 @@ export default function ProfilePage() {
               <p
                 className={`text-sm text-center ${
                   message.includes("success")
-                    ? "text-green-600"
-                    : "text-red-600"
                 }`}
               >
                 {message}
               </p>
             )}
-
             <button
               type="submit"
               disabled={loading}

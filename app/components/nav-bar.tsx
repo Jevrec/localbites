@@ -1,8 +1,6 @@
 "use client";
 
-import { Imperial_Script } from "next/font/google";
 import Link from "next/link";
-import React from 'react';
 import { useSession, signOut } from "next-auth/react"
 import { UserIcon } from "@heroicons/react/16/solid";
 
