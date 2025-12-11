@@ -119,7 +119,7 @@ export default function ProfilePage() {
     
   }
 
-  if (status === "loading") {
+  if ((status === "loading")) {
     return (
       <div className="min-h-screen">
         <UserPageSkeleton />

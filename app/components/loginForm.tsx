@@ -25,11 +25,11 @@ export default function LoginForm() {
       setMessage("Invalid email or password");
       setLoading(false);
     } else {
-      setMessage("Logged in! Redirecting in 3 seconds...");
+      //setMessage("Logged in! Redirecting in 3 seconds...");
 
       setTimeout(() => {
         router.push("/");
-      }, 3000);
+      }, 2000);
     }
   }
 
@@ -77,15 +77,9 @@ export default function LoginForm() {
         >
           Login with Google
         </button>
-        <button 
-          type="button"
-          className="black-btn"
-        >
-          Login with GitHub
-        </button>
       </div>
 
-      <Link href="register" className="text-center text-muted hover:text-accent transition-colors">
+      <Link href="register" className="text-center text-muted interactive-text">
         Register 
       </Link>
 

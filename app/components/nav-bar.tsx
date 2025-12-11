@@ -22,17 +22,17 @@ const Navbar = () => {
   return (
     <nav className="bg-surface text-foreground px-4 py-4">
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between">
-        <Link href="/" className="bg-primary hover:bg-accent text-white px-4 py-2 rounded-lg transition-colors">
-          Home
+        <Link href="/" className="text-4xl font-bold text-foreground m-3 interactive-text">
+          Localbites
         </Link>
 
         <ul className="flex flex-col sm:flex-row gap-4 mt-4 sm:mt-0">
           <li>
             {
               session ? (
-                <Link href="/user"className="hover:text-accent transition-colors flex flex-box">
+                <Link href="/user"className="interactive-text flex flex-box">
                   <UserIcon className="w-5 h-5" />
-                  {session.user?.name}
+                  <p>Profile</p>
                 </Link>
               ) : (
                 <p></p>
@@ -43,7 +43,7 @@ const Navbar = () => {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="hover:text-accent transition-colors"
+                className="interactive-text"
               >
                 {link.text}
               </Link>
@@ -56,14 +56,14 @@ const Navbar = () => {
             ) : session ? (
               <button
                 onClick={handleLogout}
-                className="hover:text-accent transition-colors cursor-pointer"
+                className="interactive-text"
               >
                 Logout
               </button>
             ) : (
               <Link
                 href="/login"
-                className="hover:text-accent transition-colors"
+                className="interactive-text"
               >
                 Login
               </Link>

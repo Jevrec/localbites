@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const [email, setEmail] = useState("");
@@ -65,6 +66,10 @@ export default function RegisterForm() {
       >
         {loading ? "Registering..." : "Register"}
       </button>
+
+      <Link href="/login" className="text-center text-muted interactive-text">
+        Login 
+      </Link>
 
       {loading && (
         <div className="flex justify-center items-center">

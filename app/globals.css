@@ -50,3 +50,7 @@ body {
 .input-box{
   @apply px-4 py-2 border border-muted rounded-lg;
 }
+
+.interactive-text{
+  @apply hover:text-accent transition-colors
+}

@@ -2,8 +2,6 @@ export default function UserPageSkeleton() {
   return (
     <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="h-10 bg-muted rounded w-48 mb-8 animate-pulse"></div>
-        
         <div className="bg-surface rounded-xl shadow-lg p-8">
           <div className="flex flex-col items-center mb-8">
             <div className="w-32 h-32 rounded-full bg-muted animate-pulse"></div>
