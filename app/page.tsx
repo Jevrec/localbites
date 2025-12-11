@@ -1,19 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GooglePlace } from "@/app/types/google";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
   const [city, setCity] = useState("");
   const [restaurants, setRestaurants] = useState<GooglePlace[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchHistory, setSearchHistory] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (session) {
+      fetchSearchHistory();
+    }
+  }, [session]);
+
+  async function fetchSearchHistory() {
+    try {
+      const res = await fetch("/api/history/search");
+      const data = await res.json();
+      setSearchHistory(data.searches || []);
+    } catch (err) {
+      console.error("Failed to fetch search history:", err);
+    }
+  }
 
   async function handleSearch() {
     if (!city.trim()) return;
 
     setLoading(true);
+    setRestaurants([]); // Reset restaurants on new search
     console.log("API request received:", city);
     
+    // Shrani iskanje v zgodovino
+    if (session) {
+      try {
+        await fetch("/api/history/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ city }),
+        });
+        fetchSearchHistory(); // Osveži zgodovino
+      } catch (err) {
+        console.error("Failed to save search history:", err);
+      }
+    }
+
     try {
       const res = await fetch("/api/search", {
         method: "POST",
@@ -36,6 +70,64 @@ export default function Home() {
     setLoading(false);
   }
 
+  async function handleQuickSearch(searchCity: string) {
+    setCity(searchCity);
+    // Uporabi timeout da se input najprej posodobi
+    setTimeout(() => {
+      setCity(searchCity);
+      // Kliči search po kratkem časovnem zamiku
+      setTimeout(() => {
+        if (!searchCity.trim()) return;
+        
+        // Pokliči handleSearch z novo vrednostjo
+        setCity(searchCity);
+        // Uporabimo malo krajši delay
+        setTimeout(() => {
+          // Ustvarimo mock event za handleSearch
+          const mockEvent = {
+            preventDefault: () => {},
+            target: { value: searchCity }
+          };
+          
+          // Pokličemo handleSearch z novo vrednostjo
+          setCity(searchCity);
+          handleSearch();
+        }, 100);
+      }, 50);
+    }, 10);
+  }
+
+  async function deleteSearchHistory(searchId?: string) {
+    try {
+      await fetch("/api/history/search", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ searchId }),
+      });
+      fetchSearchHistory();
+    } catch (err) {
+      console.error("Failed to delete search history:", err);
+    }
+  }
+
+  async function trackVisit(restaurant: GooglePlace) {
+    if (!session) return;
+
+    try {
+      await fetch("/api/visited", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          placeId: restaurant.place_id,
+          name: restaurant.name,
+          address: restaurant.vicinity,
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to track visit:", err);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-20 px-4">
       <div className="relative overflow-hidden bg-background">
@@ -49,19 +141,59 @@ export default function Home() {
             <p className="text-muted text-lg mb-8 max-w-md">
               Discover fresh restaurants every morning in your city without getting lost in endless options.
             </p>
+
+            {session && searchHistory.length > 0 && (
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-muted flex items-center gap-2">
+                     Recent searches
+
+                  <button
+                    onClick={() => deleteSearchHistory()}
+                    className="text-xs text-muted interactive-text"
+                  >
+                    Clear all
+                  </button>
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {searchHistory.map((search) => (
+                    <div key={search._id} className="group relative">
+                      <button
+                        onClick={() => handleQuickSearch(search.city)}
+                        className="px-3 py-1 bg-muted/20 hover:bg-primary/20 rounded-full text-sm text-foreground transition-colors"
+                      >
+                        {search.city}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteSearchHistory(search._id);
+                        }}
+                        className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
             
             <div className="flex gap-3 mb-4">
               <input
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 placeholder="Enter a city..."
                 className="flex-1 max-w-sm px-5 py-3 text-foreground rounded-lg border-2 border-muted shadow-sm focus:ring-2 focus:ring-primary focus:border-primary focus:outline-none transition-all"
               />
               <button
                 onClick={handleSearch}
-                className="px-5 py-2 bg-primary text-foreground rounded-lg shadow-md hover:bg-accent transition"
+                disabled={loading}
+                className="btn disabled:opacity-50"
               >
-                Search
+                {loading ? "Searching..." : "Search"}
               </button>
             </div>
           </div>
@@ -77,42 +209,44 @@ export default function Home() {
       </div>
 
       {loading && (
-        <div className="loading-spin"></div>
+        <div className="mt-10 animate-spin rounded-full h-12 w-12 border-t-4 border-foreground border-solid"></div>
       )}
 
-      <div className="mt-30 w-full max-w-2xl grid grid-cols-1 md:grid-cols-1 gap-6 rounded-4xl">
+      <div className="mt-10 w-full max-w-2xl grid grid-cols-1 md:grid-cols-1 gap-6 rounded-4xl">
         {restaurants.map((r) => {
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
             r.name + " " + (r.vicinity || "")
           )}`;
 
-        return (
-          <a
-                    key={r.place_id}
-          href={mapUrl}
-          target="_blank"
-          className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group"
-        >
-          <div className="rounded-xl absolute inset-0 bg-accent translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
-          
-          <div className="relative z-10">
-            <h2 className="text-xl font-semibold text-foreground group-hover:text-white transition-colors duration-500">
-              {r.name}
-            </h2>
-            <p className="text-muted mt-1 group-hover:text-white/80 transition-colors duration-500">
-              {r.vicinity}
-            </p>
-            {r.rating && (
-              <p className="mt-2 text-yellow-600 font-medium group-hover:text-yellow-300 transition-colors duration-500">
-                {r.rating} / 5
-              </p>
-            )}
-          </div>
-        </a>
-        );
-      })}
-
+          return (
+            <a
+              key={r.place_id}
+              href={mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackVisit(r)}
+              className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group"
+            >
+              <div className="rounded-xl absolute inset-0 bg-primary translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
+              
+              <div className="relative z-10">
+                <h2 className="text-xl font-semibold text-foreground group-hover:text-white transition-colors duration-500">
+                  {r.name}
+                </h2>
+                <p className="text-muted mt-1 group-hover:text-white/80 transition-colors duration-500">
+                  {r.vicinity}
+                </p>
+                {r.rating && (
+                  <p className="mt-2 text-yellow-600 font-medium group-hover:text-yellow-300 transition-colors duration-500">
+                    {r.rating} / 5
+                  </p>
+                )}
+              </div>
+            </a>
+          );
+        })}
       </div>
+
       {!loading && restaurants.length === 0 && (
         <p className="mt-10 text-foreground bg-surface p-10 rounded-4xl">No restaurants found yet.</p>
       )}
