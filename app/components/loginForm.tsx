@@ -40,7 +40,7 @@ export default function LoginForm() {
   return (
     <form
       onSubmit={handleLogin}
-      className="bg-surface p-15 rounded-lg shadow-md flex flex-col gap-4 w-110"
+      className="bg-surface py-10 px-15 rounded-lg shadow-md flex flex-col gap-4 w-110"
     >
       <h1 className="text-2xl font-bold">Login</h1>
 
@@ -49,7 +49,7 @@ export default function LoginForm() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="input-box"
+        className="input-box mb-1"
         required
       />
 
@@ -58,7 +58,7 @@ export default function LoginForm() {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="input-box"
+        className="input-box mb-1"
         required
       />
 
@@ -79,9 +79,13 @@ export default function LoginForm() {
         </button>
       </div>
 
-      <Link href="register" className="text-center text-muted interactive-text">
-        Register 
-      </Link>
+      <p className="text-center mt-2">
+        Don't have an account?{" "}
+        <Link href="register" className="text-center text-muted interactive-text">
+          Register
+        </Link>
+      </p>
+
 
       <p className="text-sm mt-2 text-center">{message}</p>
 

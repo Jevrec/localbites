@@ -52,7 +52,7 @@ const Navbar = () => {
           
           <li>
             {isLoading ? (
-              <span className="text-muted">...</span>
+              <span className="text-muted">•••••</span>
             ) : session ? (
               <button
                 onClick={handleLogout}

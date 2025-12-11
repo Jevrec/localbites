@@ -29,12 +29,12 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleRegister}
-      className="bg-surface p-15 rounded-lg shadow-md flex flex-col gap-4 w-110"
+      className="bg-surface py-10 px-15 rounded-lg shadow-md flex flex-col gap-4 w-110"
     >
       <h1 className="text-2xl font-bold">Register</h1>
 
       <input
-        className="input-box"
+        className="input-box mb-1"
         placeholder="Email"
         type="email"
         value={email}
@@ -44,7 +44,7 @@ export default function RegisterForm() {
 
       <input
         type="text"
-        className="input-box"
+        className="input-box mb-1"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -53,7 +53,7 @@ export default function RegisterForm() {
 
       <input
         type="password"
-        className="input-box"
+        className="input-box mb-1"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -67,9 +67,12 @@ export default function RegisterForm() {
         {loading ? "Registering..." : "Register"}
       </button>
 
-      <Link href="/login" className="text-center text-muted interactive-text">
-        Login 
-      </Link>
+      <p className="text-center mt-2">
+          Go Back to{" "}
+        <Link href="/login" className="text-center text-muted interactive-text">
+          Login 
+        </Link>
+      </p>
 
       {loading && (
         <div className="flex justify-center items-center">
