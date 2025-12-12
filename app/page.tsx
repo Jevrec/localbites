@@ -3,13 +3,27 @@
 import { useState, useEffect } from "react";
 import { GooglePlace } from "@/app/types/google";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
   const [city, setCity] = useState("");
   const [restaurants, setRestaurants] = useState<GooglePlace[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState<any[]>([]);
+
+  
+  useEffect(() => {
+    const cityFromUrl = searchParams.get("city");
+    if (cityFromUrl) {
+      setCity(cityFromUrl);
+      
+      setTimeout(() => {
+        performSearch(cityFromUrl);
+      }, 100);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (session) {
@@ -27,22 +41,22 @@ export default function Home() {
     }
   }
 
-  async function handleSearch() {
-    if (!city.trim()) return;
+  
+  async function performSearch(searchCity: string) {
+    if (!searchCity.trim()) return;
 
     setLoading(true);
-    setRestaurants([]); // Reset restaurants on new search
-    console.log("API request received:", city);
+    setRestaurants([]); 
+    console.log("API request:", searchCity);
     
-    // Shrani iskanje v zgodovino
     if (session) {
       try {
         await fetch("/api/history/search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ city }),
+          body: JSON.stringify({ city: searchCity }),
         });
-        fetchSearchHistory(); // Osveži zgodovino
+        fetchSearchHistory();
       } catch (err) {
         console.error("Failed to save search history:", err);
       }
@@ -52,7 +66,7 @@ export default function Home() {
       const res = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ city }),
+        body: JSON.stringify({ city: searchCity }),
       });
 
       if (!res.ok) {
@@ -70,31 +84,15 @@ export default function Home() {
     setLoading(false);
   }
 
+  async function handleSearch() {
+    await performSearch(city);
+  }
+
   async function handleQuickSearch(searchCity: string) {
     setCity(searchCity);
-    // Uporabi timeout da se input najprej posodobi
     setTimeout(() => {
-      setCity(searchCity);
-      // Kliči search po kratkem časovnem zamiku
-      setTimeout(() => {
-        if (!searchCity.trim()) return;
-        
-        // Pokliči handleSearch z novo vrednostjo
-        setCity(searchCity);
-        // Uporabimo malo krajši delay
-        setTimeout(() => {
-          // Ustvarimo mock event za handleSearch
-          const mockEvent = {
-            preventDefault: () => {},
-            target: { value: searchCity }
-          };
-          
-          // Pokličemo handleSearch z novo vrednostjo
-          setCity(searchCity);
-          handleSearch();
-        }, 100);
-      }, 50);
-    }, 10);
+      performSearch(searchCity);
+    }, 100);
   }
 
   async function deleteSearchHistory(searchId?: string) {
@@ -147,13 +145,6 @@ export default function Home() {
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-sm text-muted flex items-center gap-2">
                      Recent searches
-
-                  <button
-                    onClick={() => deleteSearchHistory()}
-                    className="text-xs text-muted interactive-text"
-                  >
-                    Clear all
-                  </button>
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -195,7 +186,7 @@ export default function Home() {
               >
                 {loading ? "Searching..." : "Search"}
               </button>
-            </div>
+            </div>  
           </div>
 
           <div className="flex-shrink-0 relative">
