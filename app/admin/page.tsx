@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import AdminSkeleton from "../skeletons/AdminSkeleton";
 
 interface Stats {
   totalUsers: number;
@@ -55,9 +56,7 @@ export default function AdminDashboard() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-foreground"></div>
-      </div>
+      <AdminSkeleton />
     );
   }
 

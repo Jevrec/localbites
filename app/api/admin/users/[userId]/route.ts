@@ -68,7 +68,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Await params
     const { userId } = await context.params;
 
     console.log("Deleting user:", userId);

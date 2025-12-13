@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import ManageUserSkeleton from "@/app/skeletons/ManageUserSkeleton";
 
 interface User {
   _id: string;
@@ -140,9 +141,12 @@ export default function AdminUsersPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-foreground"></div>
+      <div className="min-h-screen bg-background py-12 px-4">
+      <div className="max-w-7xl mx-auto">
+        <div className="h-10 bg-surface rounded w-64 mb-8 animate-pulse"></div>
+        <ManageUserSkeleton />
       </div>
+    </div>
     );
   }
 

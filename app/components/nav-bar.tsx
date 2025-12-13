@@ -6,7 +6,7 @@ import { UserIcon } from "@heroicons/react/16/solid";
 
 
 const Links = [
-    { href: "/history", text: 'Restaurants and History' },
+    { href: "/history", text: 'Your activity' },
 ];
 
 const Navbar = () => {

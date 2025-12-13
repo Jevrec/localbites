@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import ActivitiesSkeleton from "../skeletons/ActivitiesSkeleton";
 
 interface SearchHistory {
   _id: string;
@@ -65,6 +66,7 @@ export default function HistoryPage() {
     } catch (err) {
       console.error("Failed to fetch search history:", err);
     }
+    
   }
 
   async function fetchVisitedRestaurants() {
@@ -128,9 +130,7 @@ export default function HistoryPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-foreground"></div>
-      </div>
+      <ActivitiesSkeleton />
     );
   }
 
@@ -287,20 +287,29 @@ export default function HistoryPage() {
 
         
         {activeTab === "searches" && (
-          <div className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-              <p className="text-muted">Your recent city searches</p>
-              {searchHistory.length > 0 && (
-                <button
-                  onClick={() => deleteSearchHistory()}
-                  className="text-muted interactive-text cursor-pointer"
-                >
-                  Clear All
-                </button>
-              )}
-            </div>
-
-            {searchHistory.length === 0 ? (
+        <div className="space-y-4">
+          <div className="flex justify-between items-center mb-4">
+            <p className="text-muted">Your recent city searches</p>
+            {searchHistory.length > 0 && !loadingSearch && (
+              <button
+                onClick={() => deleteSearchHistory()}
+                className="text-muted interactive-text cursor-pointer"
+              >
+                Clear All
+              </button>
+            )}
+          </div>
+            {loadingSearch ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-surface p-4 rounded-xl shadow animate-pulse">
+                    <div className="h-6 bg-muted rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-muted rounded w-1/2 mb-3"></div>
+                    <div className="h-10 bg-muted rounded"></div>
+                  </div>
+                ))}
+              </div>
+            ) : searchHistory.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted text-lg">No search history yet</p>
                 <p className="text-sm text-muted mt-2">
