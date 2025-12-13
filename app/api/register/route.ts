@@ -31,12 +31,13 @@ export async function POST(req: Request) {
       _type: "user",
       email,
       username,
-      password: hashed
+      password: hashed,
+      role: "user", 
+      createdAt: new Date().toISOString(), 
     });
 
     return NextResponse.json({ user });
   } catch (err) {
-   
     console.error("Registration error:", err);
     return NextResponse.json(
       { error: "Server error", details: err instanceof Error ? err.message : String(err) },

@@ -30,7 +30,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             _id,
             email,
             username,
-            password
+            password,
+            role
           }
         `;
 
@@ -46,6 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user._id,
           email: user.email,
           name: user.username,
+          role: user.role || "user"
         };
       },
     }),
@@ -72,6 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               _type: "user",
               email: user.email,
               username: user.name || user.email?.split('@')[0],
+              role: "user",
             });
           }
         } catch (error) {
@@ -84,15 +87,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as any).role || "user";
       }
       
       if (account?.provider === "google") {
         const sanityUser = await sanity.fetch(
-          `*[_type == "user" && email == $email][0]{ _id }`,
+          `*[_type == "user" && email == $email][0]{ _id, role }`,
           { email: token.email }
         );
         if (sanityUser) {
           token.id = sanityUser._id;
+          token.role = sanityUser.role || "user";
         }
       }
       
@@ -101,6 +106,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        (session.user as any).role = token.role as string;
       }
       return session;
     },

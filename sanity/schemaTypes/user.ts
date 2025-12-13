@@ -36,6 +36,20 @@ export const user = defineType({
       options: {
         hotspot: true,
       },
-    })
+    }),
+    defineField({
+        name: "role",
+        type: "string",
+        title: "Role",
+        options: {
+          list: [
+            { title: "User", value: "user" },
+            { title: "Admin", value: "admin" },
+          ],
+          layout: "radio",
+        },
+        initialValue: "user",
+        validation: (Rule: any) => Rule.required(),
+    }),
   ],
 })
