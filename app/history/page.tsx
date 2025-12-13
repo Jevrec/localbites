@@ -33,6 +33,7 @@ export default function HistoryPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<"visited" | "favorites" | "searches">("visited");
   const [loading, setLoading] = useState(true);
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
   const [visitedRestaurants, setVisitedRestaurants] = useState<VisitedRestaurant[]>([]);
@@ -88,6 +89,7 @@ export default function HistoryPage() {
 
   async function deleteSearchHistory(searchId?: string) {
     try {
+      setLoadingSearch(true);
       await fetch("/api/history/search", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -97,6 +99,7 @@ export default function HistoryPage() {
     } catch (err) {
       console.error("Failed to delete search history:", err);
     }
+    setLoadingSearch(false);
   }
 
   async function removeFavorite(favoriteId: string) {
@@ -182,7 +185,7 @@ export default function HistoryPage() {
               </div>
             ) : (
                 
-              <div className="mt-10 w-full max-w-2xl grid grid-cols-1 md:grid-cols-1 gap-6 rounded-4xl">
+              <div className="mt-10 w-full max-w-5xl grid grid-cols-1 md:grid-cols-1 gap-6 rounded-4xl">
         {visitedRestaurants.map((r) => {
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
             r.name + " " + (r.address || "")
@@ -194,7 +197,7 @@ export default function HistoryPage() {
               href={mapUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group w-5xl"
+              className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group w-full"
             >
               <div className="rounded-xl absolute inset-0 bg-primary translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
               
@@ -290,7 +293,7 @@ export default function HistoryPage() {
               {searchHistory.length > 0 && (
                 <button
                   onClick={() => deleteSearchHistory()}
-                  className="text-muted interactive-text"
+                  className="text-muted interactive-text cursor-pointer"
                 >
                   Clear All
                 </button>

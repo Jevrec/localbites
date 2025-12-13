@@ -16,6 +16,7 @@
   --color-primary: var(--color-primary);
   --color-accent: var(--color-accent);
   --color-muted: var(--color-muted);
+  --color-dark: var(--color-dark);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,9 +24,10 @@
     --color-background: #1e1e2a;
     --color-foreground: #f5f5f7;
     --color-surface: #2a2a3c;
-    --color-primary: #ff4c61;
+    --color-primary: #dc4f60;
     --color-accent: #b13442;
     --color-muted: #9ca3af;
+    --color-dark: #51545a;
   }
 }
 
@@ -52,5 +54,5 @@ body {
 }
 
 .interactive-text{
-  @apply hover:text-primary transition-colors
+  @apply hover:text-primary transition-colors cursor-pointer
 }
