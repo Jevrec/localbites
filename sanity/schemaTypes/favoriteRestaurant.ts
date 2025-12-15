@@ -30,20 +30,10 @@ export const favoriteRestaurant = defineType({
       title: 'Address',
     }),
     defineField({
-      name: 'rating',
-      type: 'number',
-      title: 'Rating',
-    }),
-    defineField({
       name: 'savedAt',
       type: 'datetime',
       title: 'Saved At',
       validation: (Rule: any) => Rule.required(),
-    }),
-    defineField({
-      name: 'notes',
-      type: 'text',
-      title: 'Personal Notes',
     }),
   ],
 })
