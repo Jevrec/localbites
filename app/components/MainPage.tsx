@@ -152,7 +152,7 @@ export default function MainPage() {
                      Recent searches
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-4 w-2/3">
                   {searchHistory.map((search) => (
                     <div key={search._id} className="group relative">
                       <button

@@ -44,13 +44,16 @@ export default function HistoryPage() {
   const isFavorite = favorites.some(f => f.placeId === restaurant.placeId);
 
     if (isFavorite) {
+      setLoading(true);
       // Odstrani iz favoritov
       const favorite = favorites.find(f => f.placeId === restaurant.placeId);
       if (favorite) {
         await removeFavorite(favorite._id);
       }
+      setLoading(false);
     } else {
       // Dodaj v favorite
+      setLoading(true);
       try {
         await fetch("/api/favorites", {
           method: "POST",
@@ -65,6 +68,7 @@ export default function HistoryPage() {
       } catch (err) {
         console.error("Failed to add favorite:", err);
       }
+      setLoading(true);
     }
   }
 
@@ -125,6 +129,7 @@ export default function HistoryPage() {
   }
 
   async function fetchFavorites() {
+    setLoading(true);
     try {
       const res = await fetch("/api/favorites");
       const data = await res.json();
@@ -132,6 +137,7 @@ export default function HistoryPage() {
     } catch (err) {
       console.error("Failed to fetch favorites:", err);
     }
+    setLoading(false);
   }
 
   async function deleteSearchHistory(searchId?: string) {

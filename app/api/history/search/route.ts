@@ -6,13 +6,14 @@ import { sanity } from "@/sanity/lib/sanity";
 export async function GET() {
   try {
     const session = await auth();
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ searches: [] });
     }
 
     const searches = await sanity.fetch(
-      `*[_type == "searchHistory" && user._ref == $userId] | order(searchedAt desc)[0...10] {
+      `*[_type == "searchHistory" && user._ref == $userId]
+       | order(searchedAt desc)[0...10] {
         _id,
         city,
         searchedAt
@@ -20,20 +21,14 @@ export async function GET() {
       { userId: session.user.id }
     );
 
-    // Odstrani duplikate, obdrži samo najnovejše
-    const uniqueSearches = searches.reduce((acc: any[], curr: any) => {
-      if (!acc.find((s: any) => s.city.toLowerCase() === curr.city.toLowerCase())) {
-        acc.push(curr);
-      }
-      return acc;
-    }, []);
-
-    return NextResponse.json({ searches: uniqueSearches.slice(0, 5) });
+    // ⬅️ NI VEČ odstranjevanja duplikatov
+    return NextResponse.json({ searches });
   } catch (err) {
     console.error("Error fetching search history:", err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+
 
 // Shrani iskanje
 export async function POST(req: Request) {
