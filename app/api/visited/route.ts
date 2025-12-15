@@ -3,6 +3,29 @@ import { auth } from "@/auth";
 import { sanity } from "@/sanity/lib/sanity";
 
 // Pridobi zgodovino obiskov
+export async function DELETE(req: Request) {
+  try {
+    const session = await auth();
+    
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { visitedId } = await req.json();
+
+    if (!visitedId) {
+      return NextResponse.json({ error: "Visited ID required" }, { status: 400 });
+    }
+
+    await sanity.delete(visitedId);
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting visited:", err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}
+
 export async function GET() {
   try {
     const session = await auth();

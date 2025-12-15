@@ -40,6 +40,51 @@ export default function HistoryPage() {
   const [visitedRestaurants, setVisitedRestaurants] = useState<VisitedRestaurant[]>([]);
   const [favorites, setFavorites] = useState<FavoriteRestaurant[]>([]); 
 
+  async function toggleFavoriteFromVisited(restaurant: VisitedRestaurant) {
+  const isFavorite = favorites.some(f => f.placeId === restaurant.placeId);
+
+    if (isFavorite) {
+      // Odstrani iz favoritov
+      const favorite = favorites.find(f => f.placeId === restaurant.placeId);
+      if (favorite) {
+        await removeFavorite(favorite._id);
+      }
+    } else {
+      // Dodaj v favorite
+      try {
+        await fetch("/api/favorites", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            placeId: restaurant.placeId,
+            name: restaurant.name,
+            address: restaurant.address,
+          }),
+        });
+        fetchFavorites(); // Osveži favorite
+      } catch (err) {
+        console.error("Failed to add favorite:", err);
+      }
+    }
+  }
+
+  async function deleteVisited(visitedId: string) {
+    if (!confirm("Are you sure you want to delete this from your visited history?")) {
+      return;
+    }
+
+    try {
+      await fetch("/api/visited", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visitedId }),
+      });
+      fetchVisitedRestaurants(); // Osveži visited list
+    } catch (err) {
+      console.error("Failed to delete visited restaurant:", err);
+    }
+  }
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -191,29 +236,59 @@ export default function HistoryPage() {
             r.name + " " + (r.address || "")
           )}`;
 
-          return (
-            <a
-              key={r._id}
-              href={mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden group w-full"
-            >
-              <div className="rounded-xl absolute inset-0 bg-primary translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out"></div>
-              
-              <div className="relative z-10">
-                    <h2 className="text-xl font-semibold text-foreground">
-                        {r.name}
-                    </h2>
-                <p className="text-muted mt-1 group-hover:text-white/80 transition-colors duration-500">{r.address}</p>
-                <p className="text-sm text-muted mt-2 group-hover:text-white/80 transition-colors duration-500">
-                   Visited: {formatDate(r.visitedAt)}
-                </p>
-              </div>
-            </a>
-          );
-        })}
-      </div>
+    // Preveri če je že v favoritih
+    const isFavorite = favorites.some(f => f.placeId === r.placeId);
+
+                return (
+                  <div
+                    key={r._id}
+                    className="relative bg-surface p-5 rounded-xl shadow hover:shadow-lg transition overflow-hidden group w-full"
+                  >
+                    <div className="relative z-10">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <h2 className="text-xl font-semibold text-foreground">
+                            {r.name}
+                          </h2>
+                          <p className="text-muted mt-1">{r.address}</p>
+                          <p className="text-sm text-muted mt-2">
+                            Visited: {formatDate(r.visitedAt)}
+                          </p>
+                        </div>
+                        
+                        {/* Favorite Button */}
+                        <button
+                          onClick={() => toggleFavoriteFromVisited(r)}
+                          className="ml-4 text-2xl transition-transform hover:scale-110"
+                          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                        >
+                          {isFavorite ? "❤️" : "🤍"}
+                        </button>
+                      </div>
+
+                      <div className="flex gap-2 mt-4">
+                        <a 
+                          href={mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn flex-1"
+                        >
+                          View on Map
+                        </a>
+                        
+                        {/* Delete Button */}
+                        <button
+                          onClick={() => deleteVisited(r._id)}
+                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
             )}
           </div>
         )}

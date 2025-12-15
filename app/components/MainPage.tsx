@@ -133,8 +133,8 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center py-20 px-4">
-      <div className="relative overflow-hidden bg-background">
-        <div className="flex items-center justify-between px-10 py-20 max-w-7xl mx-auto">
+     <div className="relative overflow-hidden bg-background">
+        <div className="flex items-start justify-between px-10 py-20 max-w-7xl mx-auto">
           <div className="flex-1 max-w-2xl z-10">            
             <h1 className="text-6xl font-bold text-foreground mb-6 leading-tight">
               Find restaurants in {" "}

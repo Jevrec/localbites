@@ -31,7 +31,6 @@ export async function GET() {
   }
 }
 
-// Dodaj favorite
 export async function POST(req: Request) {
   try {
     const session = await auth();
@@ -42,7 +41,6 @@ export async function POST(req: Request) {
 
     const { placeId, name, address, rating } = await req.json();
 
-    // Preveri če že obstaja
     const existing = await sanity.fetch(
       `*[_type == "favoriteRestaurant" && user._ref == $userId && placeId == $placeId][0]`,
       { userId: session.user.id, placeId }
@@ -72,7 +70,6 @@ export async function POST(req: Request) {
   }
 }
 
-// Odstrani favorite
 export async function DELETE(req: Request) {
   try {
     const session = await auth();
