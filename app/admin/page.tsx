@@ -131,12 +131,12 @@ export default function AdminDashboard() {
           >
             Manage Users
           </button>
-          {/*<button
+          <button
             onClick={() => router.push("/studio")}
             className="px-6 py-3 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors"
           >
             Open Sanity Studio
-          </button>*/}
+          </button>
         </div>
       </div>
     </div>
