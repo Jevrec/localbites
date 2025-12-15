@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
-  --color-surface: #f4f4f5;
-  --color-primary: #ff4c61;
-  --color-accent: #ff735c;
-  --color-muted: #9ca3af;
+    --color-background: #1e1e2a;
+    --color-foreground: #f5f5f7;
+    --color-surface: #2a2a3c;
+    --color-primary: #dc4f60;
+    --color-accent: #b13442;
+    --color-muted: #9ca3af;
+    --color-dark: #51545a;
 }
 
 @theme inline {
@@ -38,7 +39,7 @@ body {
 }
 
 .black-btn{
-  @apply hover:bg-black text-white p-2 rounded-lg transition-colors border border-white;
+  @apply hover:bg-background text-foreground p-2 rounded-lg transition-colors border border-foreground;
 }
 
 .loading-spin{

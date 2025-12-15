@@ -12,7 +12,10 @@ export default function MainPage() {
   const [restaurants, setRestaurants] = useState<GooglePlace[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchHistory, setSearchHistory] = useState<any[]>([]);
-
+  
+  const [radius, setRadius] = useState(5000); // Default 5km
+  const [maxResults, setMaxResults] = useState(20); // Default 20
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     const cityFromUrl = searchParams.get("city");
@@ -64,7 +67,11 @@ export default function MainPage() {
       const res = await fetch("/api/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ city: searchCity }),
+        body: JSON.stringify({ 
+          city: searchCity,
+          radius: radius,
+          maxResults: maxResults 
+        }),
       });
 
       if (!res.ok) {
@@ -137,7 +144,7 @@ export default function MainPage() {
             <p className="text-muted text-lg mb-8 max-w-md">
               Discover fresh restaurants every morning in your city without getting lost in endless options.
             </p>
-
+            
             {session && searchHistory.length > 0 && (
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
@@ -184,10 +191,86 @@ export default function MainPage() {
               >
                 {loading ? "Searching..." : "Search"}
               </button>
-            </div>  
+            </div>
+            
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="text-sm text-muted hover:text-foreground transition-colors mb-2"
+            >
+              {showAdvanced ? "▼" : "▶"} Advanced Options
+            </button>
+
+            {showAdvanced && (
+              <div className="bg-surface p-4 rounded-lg mb-4 space-y-4">
+
+                <div>
+                  <label className="block wtext-sm font-medium text-foreground mb-2">
+                    Search Radius: {radius / 1000}km
+                  </label>
+                  <input
+                    type="range"
+                    min="1000"
+                    max="50000"
+                    step="1000"
+                    value={radius}
+                    onChange={(e) => setRadius(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                  <div className="flex justify-between text-xs text-muted mt-1">
+                    <span>1km</span>
+                    <span>25km</span>
+                    <span>50km</span>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    Maximum Results: {maxResults}
+                  </label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="20"
+                    step="1"
+                    value={maxResults}
+                    onChange={(e) => setMaxResults(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                  <div className="flex justify-between text-xs text-muted mt-1">
+                    <span>1</span>
+                    <span>10</span>
+                    <span>20</span>
+                  </div>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-foreground mb-2">Quick Presets:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    <button
+                      onClick={() => { setRadius(2000); setMaxResults(5); }}
+                      className="px-3 py-1 bg-muted/20 hover:bg-primary/20 rounded text-xs transition-colors"
+                    >
+                      Nearby (2km, 5 results)
+                    </button>
+                    <button
+                      onClick={() => { setRadius(5000); setMaxResults(10); }}
+                      className="px-3 py-1 bg-muted/20 hover:bg-primary/20 rounded text-xs transition-colors"
+                    >
+                      Local (5km, 10 results)
+                    </button>
+                    <button
+                      onClick={() => { setRadius(15000); setMaxResults(20); }}
+                      className="px-3 py-1 bg-muted/20 hover:bg-primary/20 rounded text-xs transition-colors"
+                    >
+                      Wide (15km, 20 results)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="flex-shrink-0 relative">
+          <div className="flex-shrink-0 relative hidden lg:block">
             <img 
               src="/images/Z_NIGHT_ROUND_CUSTOM.webp" 
               alt="Image" 

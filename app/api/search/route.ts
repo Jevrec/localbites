@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { city } = await req.json();
+    const { city, radius = 5000, maxResults = 20 } = await req.json();
     const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
     const geoRes = await fetch(
@@ -22,13 +22,15 @@ export async function POST(req: Request) {
     const { lat, lng } = geoData.results[0].geometry.location;
 
     const placesRes = await fetch(
-      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=restaurant&key=${apiKey}`
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=restaurant&key=${apiKey}`
     );
 
     const placesData = await placesRes.json();
     console.log("Places result:", placesData);
+    
+    const limitedResults = placesData.results?.slice(0, maxResults) || [];
 
-    return NextResponse.json({ restaurants: placesData.results || [] });
+    return NextResponse.json({ restaurants: limitedResults });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
