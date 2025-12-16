@@ -27,6 +27,12 @@ Aplikacija uporablja **Google Maps API** in **Google Places API** za iskanje lok
 
 ---
 
+
+## Spletna
+link: https://localbites.tobiasgerm.eu/
+
+---
+
 ## Namestitev
 
 ```bash
@@ -34,6 +40,4 @@ git clone https://github.com/USERNAME/PROJECT.git
 cd PROJECT
 npm install
 
-## Spletna
-link: https://localbites.tobiasgerm.eu/
 
