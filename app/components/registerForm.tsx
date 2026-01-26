@@ -4,15 +4,22 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function RegisterForm() {
+  // kontrolirani inputi + UI feedback (napake / loading)
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Registracija preko backend endpointa
+   * Backend vrača { error?: string } v UI pokažemo error ali success message
+   */
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setMessage("");
 
     const res = await fetch("/api/register", {
       method: "POST",
@@ -22,7 +29,6 @@ export default function RegisterForm() {
 
     const data = await res.json();
     setMessage(data.error || "Account created!");
-
     setLoading(false);
   }
 
@@ -60,26 +66,25 @@ export default function RegisterForm() {
         required
       />
 
-      <button 
-        className="btn"
-        disabled={loading}
-      >
+      <button className="btn" disabled={loading}>
         {loading ? "Registering..." : "Register"}
       </button>
 
       <p className="text-center mt-2">
-          Go Back to{" "}
+        Go Back to{" "}
         <Link href="/login" className="text-center text-muted interactive-text">
-          Login 
+          Login
         </Link>
       </p>
 
+      {/* indikator nalaganja med registracijo */}
       {loading && (
         <div className="flex justify-center items-center">
           <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-foreground border-solid"></div>
         </div>
       )}
 
+      {/* server odgovor če je uspešno ali ne */}
       <p className="text-sm mt-2 text-center">{message}</p>
     </form>
   );

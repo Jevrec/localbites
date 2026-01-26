@@ -1,19 +1,27 @@
 "use client";
+
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  // Controlled inputs + UI feedback (napake / loading)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
+
+  /**
+   * Prijava preko NextAuth "credentials" providerja.
+   * redirect: false -> ostanemo na isti strani in sami uredimo preusmeritev/UI state.
+   */
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+    setMessage("");
 
     const res = await signIn("credentials", {
       redirect: false,
@@ -21,18 +29,22 @@ export default function LoginForm() {
       password,
     });
 
+    // NextAuth vrne error string, če credentials niso pravilni
     if (res?.error) {
       setMessage("Invalid email or password");
       setLoading(false);
-    } else {
-      //setMessage("Logged in! Redirecting in 3 seconds...");
-
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
+      return;
     }
+
+    // Majhen delay da uporabnik vidi "Logging in..." (UX)
+    setTimeout(() => {
+      router.push("/");
+    }, 2000);
   }
 
+  /**
+   * OAuth prijava: NextAuth opravi redirect flow, zato callbackUrl.
+   */
   async function handleGoogleLogin() {
     await signIn("google", { callbackUrl: "/" });
   }
@@ -62,15 +74,12 @@ export default function LoginForm() {
         required
       />
 
-      <button 
-        className="btn"
-        disabled={loading}
-      >
+      <button className="btn" disabled={loading}>
         {loading ? "Logging in..." : "Login"}
       </button>
-      
+
       <div className="flex flex-col gap-4">
-        <button 
+        <button
           type="button"
           onClick={handleGoogleLogin}
           className="black-btn"
@@ -86,9 +95,10 @@ export default function LoginForm() {
         </Link>
       </p>
 
-
+      {/* Napaka ali info sporočilo (npr. invalid credentials) */}
       <p className="text-sm mt-2 text-center">{message}</p>
 
+      {/* Loading indikator pri prijavi */}
       {loading && (
         <div className="flex justify-center items-center">
           <div className="loading-spin"></div>
