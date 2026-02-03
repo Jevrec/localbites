@@ -116,7 +116,7 @@ export default function AdminDashboard() {
                     <span className="text-2xl font-bold text-primary">#{index + 1}</span>
                     <p className="font-semibold text-foreground capitalize">{item.city}</p>
                   </div>
-                  <span className="text-sm text-muted">{item.count} searches</span>
+                  <span className="text-sm text-muted">{item.count} searchess</span>
                 </div>
               ))}
             </div>
