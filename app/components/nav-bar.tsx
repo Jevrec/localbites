@@ -79,7 +79,7 @@ const Navbar = () => {
               </button>
             ) : (
               <Link
-                href="/login"
+                href="//rlogin"
                 className="interactive-text font-semibold cursor-pointer"
               >
                 Login
